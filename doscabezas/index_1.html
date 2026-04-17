@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dos Cabezas — Producción Audiovisual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,700;0,800;1,700;1,800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --sky: #a8d8ea;
+    --sky-light: #d6eef7;
+    --sky-dark: #5aacc8;
+    --cream: #fdf6e3;
+    --peach: #c96060;
+    --peach-dark: #B03030;
+    --sand: #e8dcc8;
+    --sand-dark: #c4a882;
+    --ink: #1a1a2e;
+    --ink-soft: #2d3561;
+    --muted: #7a8ba0;
+    --white: #fdfcf8;
+    --serif: 'Raleway', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+    overflow-x: hidden;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px 40px;
+    background: rgba(253,246,227,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 0.5px solid transparent;
+    transition: border-color 0.3s;
+  }
+  nav.scrolled { border-color: var(--sand-dark); }
+  .nav-inner {
+    width: 100%; max-width: 1100px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: var(--serif); font-size: 18px; font-weight: 300;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink); text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 120px 40px 80px;
+    position: relative; overflow: hidden;
+    background: linear-gradient(160deg, var(--sky-light) 0%, var(--cream) 55%, #f9d4b6 100%);
+  }
+
+  .hero-eyebrow {
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--sky-dark); margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(40px, 7vw, 90px);
+    font-weight: 800; line-height: 1;
+    letter-spacing: -0.03em; color: var(--ink);
+    margin-bottom: 44px;
+    opacity: 0; animation: fadeUp 0.9s 0.4s forwards;
+    max-width: 900px;
+  }
+  .hero-title em { font-style: italic; color: var(--peach-dark); }
+
+  .hero-phrases {
+    height: 36px; overflow: hidden;
+    margin-bottom: 44px;
+    opacity: 0; animation: fadeUp 0.9s 0.6s forwards;
+  }
+  .phrases-track {
+    display: flex; flex-direction: column;
+    transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .phrase {
+    height: 36px; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; letter-spacing: 0.06em; color: var(--ink-soft);
+    white-space: nowrap;
+  }
+
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink); text-decoration: none;
+    border-bottom: 0.5px solid var(--peach-dark); padding-bottom: 4px;
+    transition: gap 0.2s, color 0.2s;
+    opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
+  }
+  .hero-cta:hover { gap: 18px; color: var(--peach-dark); }
+
+  .hero-scroll {
+    position: absolute; bottom: 32px;
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0; animation: fadeIn 1s 1.4s forwards;
+  }
+
+  section { padding: 100px 40px; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 48px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .section-label::after {
+    content: ''; flex: 1; max-width: 60px;
+    height: 0.5px; background: var(--sand-dark);
+  }
+
+  #servicios { background: var(--sky-light); }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border: 0.5px solid var(--sky-dark);
+  }
+  .service-item {
+    padding: 40px 32px;
+    border-right: 0.5px solid var(--sky-dark);
+    background: var(--white);
+    transition: background 0.25s;
+  }
+  .service-item:hover { background: var(--sky-light); }
+  .service-item:nth-child(3) { border-right: none; }
+  .service-num {
+    font-size: 10px; letter-spacing: 0.14em; color: var(--sky-dark);
+    margin-bottom: 32px; display: block;
+  }
+  .service-title {
+    font-family: var(--serif); font-size: 22px; font-weight: 800;
+    line-height: 1.2; margin-bottom: 16px; color: var(--ink);
+  }
+  .service-desc { font-size: 12px; color: var(--muted); line-height: 1.7; }
+  .service-item-wide {
+    border-top: 0.5px solid var(--sky-dark);
+    grid-column: 1 / -1; border-right: none;
+    display: grid; grid-template-columns: 1fr 2fr;
+    gap: 40px; align-items: start;
+    background: var(--cream); transition: background 0.25s;
+  }
+  .service-item-wide:hover { background: var(--sky-light); }
+
+  #trabajo { background: var(--cream); }
+  .work-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+  .work-item { position: relative; overflow: hidden; background: var(--sand); cursor: pointer; }
+  .work-item:first-child { grid-column: 1 / -1; }
+  .work-thumb { width: 100%; aspect-ratio: 16/9; position: relative; overflow: hidden; }
+  .work-thumb iframe { width: 100%; height: 100%; border: none; pointer-events: none; transition: transform 0.5s ease; }
+  .work-item:hover .work-thumb iframe { transform: scale(1.02); }
+  .work-overlay {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; justify-content: flex-end; padding: 24px;
+    background: linear-gradient(to top, rgba(26,26,46,0.8) 0%, transparent 55%);
+    opacity: 0; transition: opacity 0.3s; pointer-events: none;
+  }
+  .work-item:hover .work-overlay { opacity: 1; }
+  .work-overlay-title { font-family: var(--serif); font-size: 20px; font-weight: 700; color: #fdfcf8; line-height: 1.2; margin-bottom: 4px; }
+  .work-overlay-tag { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(253,252,248,0.6); }
+  .work-info { padding: 16px 0 4px; border-top: 0.5px solid var(--sand-dark); display: flex; justify-content: space-between; align-items: baseline; }
+  .work-title { font-family: var(--serif); font-size: 16px; font-weight: 700; color: var(--ink); }
+  .work-tag { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  a.work-link { position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+  .play-btn { width: 52px; height: 52px; border-radius: 50%; background: rgba(253,246,227,0.95); display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0.8); transition: opacity 0.3s, transform 0.3s; }
+  .play-btn svg { width: 18px; height: 18px; fill: var(--ink); margin-left: 2px; }
+  .work-item:hover .play-btn { opacity: 1; transform: scale(1); }
+
+  #nosotros { background: var(--sand); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .about-title { font-family: var(--serif); font-size: clamp(28px, 4vw, 48px); font-weight: 800; line-height: 1.1; margin-bottom: 24px; color: var(--ink); }
+  .about-title em { font-style: italic; color: var(--peach-dark); }
+  .about-body { font-size: 13px; color: var(--ink-soft); line-height: 1.8; margin-bottom: 16px; }
+  .about-visual { aspect-ratio: 4/5; background: var(--sky-light); border: 0.5px solid var(--sky-dark); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .about-visual-text { font-family: var(--serif); font-size: 100px; font-weight: 300; color: var(--sky); line-height: 1; text-align: center; user-select: none; }
+  .about-visual-label { position: absolute; bottom: 24px; left: 24px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--sky-dark); }
+
+  #contacto { background: var(--ink); color: var(--cream); text-align: center; }
+  #contacto .section-label { color: rgba(253,246,227,0.35); justify-content: center; }
+  #contacto .section-label::after { background: rgba(253,246,227,0.15); }
+  .contact-title { font-family: var(--serif); font-size: clamp(36px, 6vw, 80px); font-weight: 800; line-height: 1; margin-bottom: 40px; color: var(--cream); }
+  .contact-title em { font-style: italic; color: var(--peach); }
+  .contact-link { display: inline-flex; align-items: center; gap: 10px; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cream); text-decoration: none; border-bottom: 0.5px solid var(--peach); padding-bottom: 4px; transition: gap 0.2s, color 0.2s; }
+  .contact-link:hover { gap: 18px; color: var(--peach); }
+  .contact-details { display: flex; justify-content: center; gap: 48px; font-size: 11px; letter-spacing: 0.1em; color: rgba(253,246,227,0.4); }
+  .contact-details a { color: inherit; text-decoration: none; transition: color 0.2s; }
+  .contact-details a:hover { color: var(--peach); }
+
+  footer { background: var(--ink); color: rgba(253,246,227,0.25); padding: 24px 40px; display: flex; justify-content: space-between; align-items: center; border-top: 0.5px solid rgba(253,246,227,0.08); font-size: 10px; letter-spacing: 0.1em; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    section { padding: 60px 20px; }
+    .work-grid { grid-template-columns: 1fr; }
+    .work-item:first-child { grid-column: 1; }
+    .services-grid { grid-template-columns: 1fr; }
+    .service-item { border-right: none; border-bottom: 0.5px solid var(--sky-dark); }
+    .service-item:nth-child(3) { border-bottom: 0.5px solid var(--sky-dark); }
+    .service-item-wide { grid-column: 1; grid-template-columns: 1fr; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-visual { display: none; }
+    .contact-details { flex-direction: column; gap: 12px; align-items: center; }
+    footer { flex-direction: column; gap: 8px; text-align: center; }
+    .phrase { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Dos Cabezas</a>
+    <div class="nav-links">
+      <a href="#servicios">Servicios</a>
+      <a href="#trabajo">Trabajo</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <p class="hero-eyebrow">Producción audiovisual · Argentina</p>
+  <h1 class="hero-title">Hacemos visible<br>lo que <em>tenés para decir</em></h1>
+  <div class="hero-phrases">
+    <div class="phrases-track" id="phrasesTrack">
+      <div class="phrase">Tu marca, contada con imagen y sonido.</div>
+      <div class="phrase">Grabamos. Editamos. Vos publicás.</div>
+      <div class="phrase">Del evento al video, sin vueltas.</div>
+      <div class="phrase">Producción audiovisual desde Córdoba para todo el país.</div>
+    </div>
+  </div>
+  <a href="#servicios" class="hero-cta">Ver qué hacemos →</a>
+  <span class="hero-scroll">↓ Scroll</span>
+</section>
+
+<section id="servicios">
+  <div class="section-inner">
+    <p class="section-label reveal">Lo que hacemos</p>
+    <div class="services-grid reveal">
+      <div class="service-item">
+        <span class="service-num">01</span>
+        <h3 class="service-title">Videos institucionales & marca</h3>
+        <p class="service-desc">Contamos quién sos, qué hacés y por qué importa. Piezas para tu web, presentaciones o campañas.</p>
+      </div>
+      <div class="service-item">
+        <span class="service-num">02</span>
+        <h3 class="service-title">Contenido para redes sociales</h3>
+        <p class="service-desc">Reels, coberturas y piezas pensadas para generar impacto en Instagram, YouTube y TikTok.</p>
+      </div>
+      <div class="service-item">
+        <span class="service-num">03</span>
+        <h3 class="service-title">Eventos & coberturas</h3>
+        <p class="service-desc">Registramos lo que pasa para que quede. Lanzamientos, shows, conferencias y todo lo que vale la pena documentar.</p>
+      </div>
+      <div class="service-item service-item-wide">
+        <div>
+          <span class="service-num">04</span>
+          <h3 class="service-title">Delega tu edición</h3>
+        </div>
+        <div>
+          <p class="service-desc" style="margin-bottom:14px;">Grabás, nosotros editamos. Reels, videos de YouTube, podcasts, vlogs — cualquier formato. Mandás el material en crudo y recibís el video listo para publicar.</p>
+          <p class="service-desc">Ideal para creadores, emprendedores y negocios que generan contenido constantemente pero no tienen tiempo o equipo para la postproducción.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="trabajo">
+  <div class="section-inner">
+    <p class="section-label reveal">Trabajo seleccionado</p>
+    <div class="work-grid">
+      <div class="work-item reveal">
+        <div class="work-thumb">
+          <iframe src="https://www.youtube.com/embed/2UfkMI4GhvM?rel=0&modestbranding=1" title="El futuro es ahora" loading="lazy" allowfullscreen></iframe>
+        </div>
+        <a href="https://youtu.be/2UfkMI4GhvM" target="_blank" class="work-link" aria-label="Ver El futuro es ahora">
+          <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="work-overlay"><p class="work-overlay-title">El futuro es ahora</p><p class="work-overlay-tag">Campaña institucional</p></div>
+        </a>
+        <div class="work-info"><span class="work-title">El futuro es ahora</span><span class="work-tag">Institucional</span></div>
+      </div>
+      <div class="work-item reveal">
+        <div class="work-thumb">
+          <iframe src="https://www.youtube.com/embed/pjygDNIrUQc?rel=0&modestbranding=1" title="Romper El Eje" loading="lazy" allowfullscreen></iframe>
+        </div>
+        <a href="https://youtu.be/pjygDNIrUQc" target="_blank" class="work-link" aria-label="Ver Romper El Eje">
+          <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="work-overlay"><p class="work-overlay-title">Romper El Eje</p><p class="work-overlay-tag">Podcast</p></div>
+        </a>
+        <div class="work-info"><span class="work-title">Romper El Eje</span><span class="work-tag">Podcast</span></div>
+      </div>
+      <div class="work-item reveal">
+        <div class="work-thumb">
+          <iframe src="https://www.youtube.com/embed/YdKtHc4kV6I?rel=0&modestbranding=1" title="Corsos 2026 Unquillo" loading="lazy" allowfullscreen></iframe>
+        </div>
+        <a href="https://youtu.be/YdKtHc4kV6I" target="_blank" class="work-link" aria-label="Ver Corsos 2026">
+          <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="work-overlay"><p class="work-overlay-title">Corsos 2026 — Unquillo</p><p class="work-overlay-tag">Evento / Cobertura</p></div>
+        </a>
+        <div class="work-info"><span class="work-title">Corsos 2026 — Unquillo</span><span class="work-tag">Evento</span></div>
+      </div>
+      <div class="work-item reveal">
+        <div class="work-thumb">
+          <iframe src="https://www.youtube.com/embed/nXNbeHEkcnk?rel=0&modestbranding=1" title="Maravilla Martinez BTS" loading="lazy" allowfullscreen></iframe>
+        </div>
+        <a href="https://youtu.be/nXNbeHEkcnk" target="_blank" class="work-link" aria-label="Ver Maravilla Martinez BTS">
+          <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="work-overlay"><p class="work-overlay-title">Maravilla Martínez en Córdoba</p><p class="work-overlay-tag">BTS</p></div>
+        </a>
+        <div class="work-info"><span class="work-title">Maravilla Martínez en Córdoba</span><span class="work-tag">BTS</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="nosotros">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div>
+        <p class="section-label reveal">Quiénes somos</p>
+        <h2 class="about-title reveal">Producción <em>con criterio</em> y punto de vista propio</h2>
+        <p class="about-body reveal">Dos Cabezas es una productora audiovisual con base en Córdoba, Argentina. Trabajamos con marcas, negocios y proyectos que tienen algo real para contar.</p>
+        <p class="about-body reveal">Nos ocupamos de todo el proceso: desde la idea hasta la entrega final. Producción, dirección y postproducción bajo el mismo techo.</p>
+      </div>
+      <div class="about-visual reveal" aria-hidden="true">
+        <div class="about-visual-text">DC</div>
+        <span class="about-visual-label">Córdoba, Argentina</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contacto">
+  <div class="section-inner">
+    <p class="section-label">Contacto</p>
+    <h2 class="contact-title">Hablemos de<br>tu <em>próximo proyecto</em></h2>
+    <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:60px; align-items:center;">
+      <a href="https://wa.me/5493517565947?text=Hola%2C%20me%20interesa%20hablar%20sobre%20un%20proyecto" target="_blank" class="contact-link" style="background:#25D366; color:#fff; border:none; padding:12px 24px; border-radius:4px; font-size:11px; letter-spacing:0.14em; display:inline-flex; align-items:center; gap:10px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.122 1.528 5.855L.057 23.882l6.207-1.43A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.888 9.888 0 01-5.031-1.378l-.36-.214-3.733.859.925-3.638-.235-.374A9.861 9.861 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg>
+        WhatsApp →
+      </a>
+      <a href="mailto:contactopaulosierra@gmail.com" class="contact-link" style="padding:12px 24px; border-radius:4px; border:0.5px solid var(--peach);">Email →</a>
+    </div>
+    <div class="contact-details">
+      <span>🇦🇷 Hecho en Córdoba, Argentina. Industria nacional.</span>
+      <a href="https://instagram.com/doscabezasfilms" target="_blank">@doscabezasfilms</a>
+      <a href="mailto:contactopaulosierra@gmail.com">contactopaulosierra@gmail.com</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Dos Cabezas Producción Audiovisual</span>
+  <span>doscabezas.com.ar</span>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+
+  const track = document.getElementById('phrasesTrack');
+  const total = track.querySelectorAll('.phrase').length;
+  let current = 0;
+  setInterval(() => {
+    current = (current + 1) % total;
+    track.style.transform = `translateY(-${current * 36}px)`;
+  }, 3000);
+</script>
+</body>
+</html>
